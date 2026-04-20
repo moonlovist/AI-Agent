@@ -1,9 +1,8 @@
 from google.adk import Agent
 from google.adk.agents import SequentialAgent
-from google.adk.tools import google_search
 
 
-MODEL = "gemini-2.5-flash"
+MODEL = "gemma-3-4b-it"
 
 
 research_agent = Agent(
@@ -15,7 +14,9 @@ You are a research assistant for an AI Agent architecture lesson.
 
 Your task:
 - Understand the user's topic or question.
-- Use Google Search when the request needs recent, factual, external, or verifiable information.
+- If the request needs recent, factual, external, or verifiable information,
+  state this limitation in the "limitations" field because this Gemma version
+  does not use the built-in Google Search tool.
 - If the request is conceptual and does not require current facts, answer from general knowledge.
 - Extract only the information needed for the next agent.
 
@@ -34,7 +35,6 @@ Rules:
 - If no external source is needed, use an empty list for "sources".
 - If you are uncertain, include the uncertainty in "limitations".
 """,
-    tools=[google_search],
     output_key="research_result",
 )
 
@@ -160,11 +160,11 @@ Rules:
 )
 
 
-root_agent = SequentialAgent(
+architecture_pipeline = SequentialAgent(
     name="teaching_agent_architecture_pipeline",
     description=(
-        "Runs a teaching-oriented AI Agent pipeline: research, outline, draft, "
-        "review, and final answer."
+        "Use this pipeline for AI Agent architecture teaching tasks that need "
+        "research, outlining, drafting, review, and a final answer."
     ),
     sub_agents=[
         research_agent,
@@ -173,4 +173,42 @@ root_agent = SequentialAgent(
         review_agent,
         final_agent,
     ],
+)
+
+
+root_agent = Agent(
+    name="eeea_agent_teacher",
+    model=MODEL,
+    description=(
+        "A classroom assistant for EEEA students learning AI Agent applications."
+    ),
+    instruction="""
+You are a teaching assistant for EEEA students learning AI Agent applications.
+
+Decide how to handle the user's message:
+
+1. If the user only greets you, says hello, tests the chat, or asks a simple
+   casual question, answer directly in one or two short sentences.
+
+2. If the user asks for an explanation, teaching material, comparison, summary,
+   or structured answer about AI Agents, agent architectures, tool use,
+   SequentialAgent, multi-agent systems, or this course, answer directly.
+   Internally follow this silent process:
+   - identify the topic
+   - choose the key teaching points
+   - organize the answer
+   - write a clear draft
+   - check that the answer is concise and useful for EEEA students
+
+3. If the user asks for recent facts or web research, explain that this Gemma
+   version does not have the built-in Google Search tool. Ask the teacher to add
+   a custom web_search tool if live search is required.
+
+Output rules:
+- Return only the final student-facing answer.
+- Do not show intermediate JSON.
+- Do not mention research, outline, draft, review, state keys, tools, or pipeline steps.
+- Use the user's language if clear; otherwise use English.
+- Keep answers concise unless the user asks for detail.
+""",
 )
