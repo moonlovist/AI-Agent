@@ -2,26 +2,37 @@
 
 This guide is for students using Windows. It explains how to run the agents in this repository, including `my_agent_project`, with Google ADK.
 
-## 1. Install Anaconda or Miniconda
+## 1. Install Git
 
-Install one of the following:
+Install Git for Windows:
 
-- Anaconda: https://www.anaconda.com/download
-- Miniconda: https://docs.conda.io/projects/miniconda/
+- https://git-scm.com/download/win
 
-After installation, open **Anaconda Prompt** from the Windows Start menu.
+During installation, the default options are usually fine.
 
-## 2. Go to the Project Folder
+## 2. Download the Course Files from GitHub
 
-In Anaconda Prompt, go to the folder that contains this repository.
+Open **Command Prompt** or **Git Bash**, then go to a folder where you want to save the course files.
 
 Example:
 
 ```bat
-cd C:\Users\YourName\Downloads\Teaching_AI_Agent
+cd C:\Users\YourName\Downloads
 ```
 
-You should be in the parent folder that contains folders such as:
+Clone the teacher's GitHub repository:
+
+```bat
+git clone https://github.com/moonlovist/AI-Agent.git
+```
+
+Then enter the project folder:
+
+```bat
+cd AI-Agent
+```
+
+You should now be in the parent folder that contains folders such as:
 
 ```text
 my_agent_project
@@ -30,9 +41,22 @@ Sequential_agent_improved
 Astronomy_image_agent
 ```
 
-Do not run `adk web` from inside `my_agent_project`. Run it from the parent folder.
+Do not run `adk web` from inside `my_agent_project`. Run it from this parent folder.
 
-## 3. Create the Conda Environment
+## 3. Install Anaconda or Miniconda
+
+Install one of the following:
+
+- Anaconda: https://www.anaconda.com/download
+- Miniconda: https://docs.conda.io/projects/miniconda/
+
+After installation, open **Anaconda Prompt** again and go back to the cloned project folder:
+
+```bat
+cd C:\Users\YourName\Downloads\AI-Agent
+```
+
+## 4. Create the Conda Environment
 
 ```bat
 conda create -n agent_env python=3.11
@@ -45,14 +69,14 @@ When the environment is active, the prompt should start with:
 (agent_env)
 ```
 
-## 4. Install the Required Packages
+## 5. Install the Required Packages
 
 ```bat
 pip install google-adk python-dotenv ipykernel
 python -m ipykernel install --user --name agent_env --display-name "agent_env"
 ```
 
-## 5. Create the Google API Key File
+## 6. Create the Google API Key File
 
 Each agent needs access to a Google API key. For `my_agent_project`, create this file:
 
@@ -90,14 +114,14 @@ notepad Sequential_agent_improved\.env
 notepad Astronomy_image_agent\.env
 ```
 
-## 6. Run ADK Web
+## 7. Run ADK Web
 
 Make sure you are still in the parent folder of the agent folders.
 
 Example:
 
 ```bat
-cd C:\Users\YourName\Downloads\Teaching_AI_Agent
+cd C:\Users\YourName\Downloads\AI-Agent
 conda activate agent_env
 adk web
 ```
@@ -117,7 +141,7 @@ Then select the agent you want to test, for example:
 - `Sequential_agent_improved`
 - `Astronomy_image_agent`
 
-## 7. Run the Notebook
+## 8. Run the Notebook
 
 If you use `Instruction.ipynb`, open Jupyter Lab from the same activated environment:
 
@@ -205,4 +229,3 @@ Then open:
 ```text
 http://localhost:8001
 ```
-
